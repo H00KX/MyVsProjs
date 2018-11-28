@@ -19,8 +19,7 @@ int main()
                   30  // 宽度 30 列 // 1 列 = 1 个汉字 或 2 个英文 
     );
 
-    CBlock c;
-    CSense sense(10, 20);
+    CSense sense(20, 30);
 
 
     while (true)
@@ -30,9 +29,8 @@ int main()
         for (int i = 0; i < 4; i++)
         {
             //分别打印出四个坐标点
-            /*sense.ShowBlock(block.X(i) + 10,
-                            block.Y(i) + 10);*/
-            sense.ShowBlock(c.X(i) + 10, c.Y(i) + 10);
+            /*sense.ShowBlock(sense.m_Block.X(i) + nOffset,
+                            sense.m_Block.Y(i) + nOffset);*/
         }
 
 
