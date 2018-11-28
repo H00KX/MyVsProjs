@@ -2,12 +2,13 @@
 #include "Sense.h"
 #include <stdlib.h>
 
-CSense::CSense()
+CSense::CSense(int xSize, int ySize)
 {
-    m_nMapWidth = 10;
-    m_nMapHeight = 20;
+    m_nMapWidth = xSize;
+    m_nMapHeight = ySize;
 
-    m_pMap = (char*)malloc(m_nMapWidth * m_nMapHeight);
+    m_pMap = shared_ptr<char>(new char[m_nMapWidth * m_nMapHeight], \
+                              std::default_delete<char[]>());
 
     //背景墙需要初始化
 
@@ -19,18 +20,18 @@ CSense::CSense()
 
             if (j == 0 || j == m_nMapWidth - 1 || i == m_nMapHeight - 1)
             {
-                m_pMap[i*m_nMapWidth + j] = 1;
+                (&*m_pMap)[i*m_nMapWidth + j] = 1;
             }
             else
             {
-                m_pMap[i*m_nMapWidth + j] = 0;
+                (&*m_pMap)[i*m_nMapWidth + j] = 0;
             }
 
         }
     }
 
     //初始化方块
-    m_Block.Init();
+    m_Block = CBlock();
     DrawBg();
 }
 
@@ -43,11 +44,11 @@ void CSense::DrawBg()
         for (int j = 0; j < m_nMapWidth; j++)
         {
             //表示该块需要清除
-            if (m_pMap[i*m_nMapWidth + j] == 0)
+            if ((&*m_pMap)[i*m_nMapWidth + j] == 0)
             {
                 ShowBg(i, j);
             }
-            else if (m_pMap[i*m_nMapWidth + j] == 1)
+            else if ((&*m_pMap)[i*m_nMapWidth + j] == 1)
             {
                 ShowBlock(i, j);
             }

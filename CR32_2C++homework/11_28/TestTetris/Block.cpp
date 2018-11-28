@@ -10,10 +10,6 @@ CBlock::CBlock()
     SetShape(m_Type);
 }
 
-CBlock::~CBlock()
-{
-}
-
 void CBlock::LeftRotate()
 {
     int coords[4][2];
@@ -49,6 +45,7 @@ void CBlock::SetType()
 
 void CBlock::SetShape(emBlockType nType)
 {
+    //总共7中类型的方块，每个方块，由4个小块组成，每个小块有x，y坐标
     static const int coordsTable[8][4][2] = {
         { { 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 } },
         { { 0, -1 },{ 0, 0 },{ -1, 0 },{ -1, 1 } },

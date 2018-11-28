@@ -7,10 +7,11 @@ class CBlock
 
 public:
     CBlock();
-    ~CBlock();
+    ~CBlock() = default;
 
 public:
-    enum emBlockType {
+    enum emBlockType
+    {
         NoShape = 0,
         ZShape,
         SShape,
@@ -22,7 +23,7 @@ public:
     };
 
 
-    
+
 
     //×óÐý×ª
     void LeftRotate();
@@ -30,19 +31,23 @@ public:
     //ÓÒÐý×ª
     void RightRotate();
 
-    void SetX(int Index, int X) {
+    void SetX(int Index, int X)
+    {
         m_coords[Index][0] = X;
     }
 
-    int X(int Index) {
+    int X(int Index)
+    {
         return m_coords[Index][0];
     }
 
-    int Y(int Index) {
+    int Y(int Index)
+    {
         return m_coords[Index][1];
     }
 
-    void SetY(int Index, int Y) {
+    void SetY(int Index, int Y)
+    {
         m_coords[Index][1] = Y;
     }
 

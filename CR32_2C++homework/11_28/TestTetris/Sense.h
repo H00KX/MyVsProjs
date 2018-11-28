@@ -9,7 +9,7 @@ using  namespace std;
 class CSense
 {
 public:
-    void Init();
+    CSense(int xSize, int ySize);
 
     void DrawBg();
 
