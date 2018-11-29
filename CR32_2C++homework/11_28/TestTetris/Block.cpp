@@ -1,14 +1,17 @@
 #include "stdafx.h"
 #include "Block.h"
 #include <stdlib.h>
+#include <iostream>
 #include <stdio.h>
 
+using namespace std;
 
 CBlock::CBlock()
 {
     SetType();
     SetShape(m_Type);
 }
+
 
 //这个才是右转？???
 void CBlock::LeftRotate()
@@ -18,9 +21,11 @@ void CBlock::LeftRotate()
 
     for (int i = 0; i < 4; ++i)
     {
-        SetX(i, coords[i][1]);
-        SetY(i, -coords[i][0]);
+        SetX(i, -coords[i][1]);
+        SetY(i, coords[i][0]);
     }
+
+    
 
 }
 
@@ -31,8 +36,8 @@ void CBlock::RightRotate()
 
     for (int i = 0; i < 4; ++i)
     {
-        SetX(i, -coords[i][1]);
-        SetY(i, coords[i][0]);
+        SetX(i, coords[i][1]);
+        SetY(i, -coords[i][0]);
     }
 }
 
@@ -52,7 +57,7 @@ void CBlock::SetShape(emBlockType nType)
         每个方块 4行4列
             -1    0    1    2
 
-        -1        *    *
+        -1   O    *    *
 
          0   *    *                 { 0, -1 },{ 0, 0 },{ -1, 0 },{ -1, 1 }
 
@@ -69,8 +74,8 @@ void CBlock::SetShape(emBlockType nType)
         { { 0, -1 },{ 0, 0 },{ 0, 1 },{ 0, 2 } },   //一横
         { { -1, 0 },{ 0, 0 },{ 1, 0 },{ 0, 1 } },   //右土
         { { 0, 0 },{ 1, 0 },{ 0, 1 },{ 1, 1 } },    //正方形
-        { { -1, -1 },{ 0, -1 },{ 0, 0 },{ 0, 1 } }, //
-        { { 1, -1 },{ 0, -1 },{ 0, 0 },{ 0, 1 } }
+        { { -1, -1 },{ 0, -1 },{ 0, 0 },{ 0, 1 } }, //|____
+        { { 1, -1 },{ 0, -1 },{ 0, 0 },{ 0, 1 } }   //|￣￣
     };
 
     for (int i = 0; i < 4; i++)

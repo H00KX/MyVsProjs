@@ -4,20 +4,31 @@
 #include "Block.h"
 #include "setdisplay.h"
 
+#define DOWN -1
+#define LEFT  0
+#define RIGHT 1
+
 using  namespace std;
 
 class CSense
 {
 public:
+    CSense() = delete;
     CSense(int xSize, int ySize);
 
     void DrawBg();
 
     void ShowBlock(int x, int y);
     void ShowBg(int x, int y);
-    
-    bool BlockMoveable(int nDiret);
-    bool BlockRotateable();
+
+    void CreateBlock();
+    bool BlockTryMove(int nDiret);
+    bool BlockTryRotate();
+    void FixBlock();
+
+    int  m_nCurX;
+    int  m_nCurY;
+    CBlock m_Block;
 
 private:
 
@@ -27,9 +38,6 @@ private:
     int m_nMapHeight;
 
 
-    CBlock m_Block;
-    int  m_nCurX;
-    int m_nCurY;
 
 };
 

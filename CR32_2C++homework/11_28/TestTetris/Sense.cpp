@@ -11,8 +11,6 @@ CSense::CSense(int xSize, int ySize)
     m_pMap = shared_ptr<char>(new char[m_nMapWidth * m_nMapHeight], \
                               std::default_delete<char[]>());
 
-    m_nCurX = 0;
-    m_nCurY = 10;
 
     //背景墙需要初始化
 
@@ -35,8 +33,9 @@ CSense::CSense(int xSize, int ySize)
         }
     }
 
-    //初始化方块
-    m_Block = CBlock();
+    //初始化一个新方块
+    CreateBlock();
+
     DrawBg();
 }
 
@@ -84,12 +83,106 @@ void CSense::ShowBg(int x, int y)
     );
 }
 
-bool CSense::BlockMoveable(int nDiret)
+void CSense::CreateBlock()
 {
-    return false;
+    m_nCurX = 5;
+    m_nCurY = 3;
+    m_Block = CBlock();
 }
 
-bool CSense::BlockRotateable()
+bool CSense::BlockTryMove(int nDiret)
 {
-    return false;
+    //要移动的方向的下一个块坐标
+    int x = 0;
+    int y = 0;
+    if (nDiret == DOWN)
+    {
+        //下移的判断
+        for (int i = 0; i < 4; i++)
+        {
+            //方块矩阵索引从-1开始，转换为Sense索引，要 - （-1)
+            x = m_nCurX + m_Block.X(i) + 1;
+            y = m_nCurY + m_Block.Y(i);
+
+            if ((&*m_pMap)[x*m_nMapWidth + y] == 1 ||
+                x >= m_nMapHeight - 1 || y >= m_nMapWidth - 1)
+            {
+                return false;
+            }
+        }
+
+        m_nCurX++;  //x坐标加一，即下移
+        return true;
+    }
+
+
+    if (nDiret == RIGHT)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            //方块矩阵索引从-1开始，转换为Sense索引，要 偏移 （-1)
+            x = m_nCurX + m_Block.X(i);
+            y = m_nCurY + m_Block.Y(i) + 1;
+
+            if ((&*m_pMap)[x*m_nMapWidth + y] == 1)
+            {
+                return false;
+            }
+        }
+
+        m_nCurY++;  //y坐标加一，即右移
+        return true;
+    }
+
+    if (nDiret == LEFT)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            //方块矩阵索引从-1开始，转换为Sense索引，要 - （-1)
+            x = m_nCurX + m_Block.X(i);
+            y = m_nCurY + m_Block.Y(i);
+
+            if ((&*m_pMap)[x*m_nMapWidth + y] == 1)
+            {
+                return false;
+            }
+        }
+
+        m_nCurY--;  //y坐标减一，即左移
+        return true;
+    }
+}
+
+bool CSense::BlockTryRotate()
+{
+    int x = 0;
+    int y = 0;
+    //先旋转，之后判断是否有重叠，若有，再转回去。
+    m_Block.RightRotate();
+
+    for (int i = 0; i < 4; i++)
+    {
+        //方块矩阵索引从-1开始，转换为Sense索引，要 - （-1)
+        x = m_nCurX + m_Block.X(i);
+        y = m_nCurY + m_Block.Y(i) + 1;
+
+        if ((&*m_pMap)[x*m_nMapWidth + y] == 1)
+        {
+            m_Block.LeftRotate();
+            return false;
+        }
+    }
+    return true;
+}
+
+void CSense::FixBlock()
+{
+    int x = 0;
+    int y = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        x = m_nCurX + m_Block.X(i);
+        y = m_nCurY + m_Block.Y(i) + 1;
+        (&*m_pMap)[x*m_nMapWidth + y] = 1;
+    }
 }
