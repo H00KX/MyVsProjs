@@ -39,7 +39,7 @@ CSense::CSense(int xSize, int ySize)
     DrawBg();
 }
 
-
+//画整个背景
 void CSense::DrawBg()
 {
 
@@ -61,31 +61,59 @@ void CSense::DrawBg()
     }
 }
 
-//绘制方块
+//画整个方块
+void CSense::DrawBlock()
+{
+    int x = 0;
+    int y = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        x = m_nCurX + m_Block.X(i);
+        //y坐标0，是左边的墙，所以y打印坐标要加一
+        y = m_nCurY + m_Block.Y(i) + 1;
+        ShowBlock(x, y);
+    }
+}
+
+//绘制方块色
 void CSense::ShowBlock(int x, int y)
 {
     WriteChar(x,  // 第 1 行
               y,  // 第 1 列
               "  ",
-              SetConsoleColor(COLOR_BLACK, // 
-                              COLOR_WHITE)  // 白色背景
+              SetConsoleColor(COLOR_WHITE, // 黑色背景
+                              COLOR_WHITE)  // 红色前景
     );
 }
 
-//绘制背景
+//抹除整个方块
+void CSense::ClearBlock()
+{
+    int x = 0;
+    int y = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        x = m_nCurX + m_Block.X(i);
+        //y坐标0，是左边的墙，所以y打印坐标要加一
+        y = m_nCurY + m_Block.Y(i) + 1;
+        ShowBg(x, y);
+    }
+}
+
+//绘制背景色
 void CSense::ShowBg(int x, int y)
 {
     WriteChar(x,  // 第 1 行
               y,  // 第 1 列
               "  ",
-              SetConsoleColor(COLOR_WHITE, // 黑色前景
-                              COLOR_BLACK)  // 白色背景
+              SetConsoleColor(COLOR_WHITE, // 白色背景
+                              COLOR_BLACK)  // 黑色前景
     );
 }
 
 void CSense::CreateBlock()
 {
-    m_nCurX = 5;
+    m_nCurX = 3;
     m_nCurY = 3;
     m_Block = CBlock();
 }
@@ -102,10 +130,10 @@ bool CSense::BlockTryMove(int nDiret)
         {
             //方块矩阵索引从-1开始，转换为Sense索引，要 - （-1)
             x = m_nCurX + m_Block.X(i) + 1;
-            y = m_nCurY + m_Block.Y(i);
+            y = m_nCurY + m_Block.Y(i) + 1;
 
             if ((&*m_pMap)[x*m_nMapWidth + y] == 1 ||
-                x >= m_nMapHeight - 1 || y >= m_nMapWidth - 1)
+                x >= m_nMapHeight - 1)
             {
                 return false;
             }
@@ -122,9 +150,10 @@ bool CSense::BlockTryMove(int nDiret)
         {
             //方块矩阵索引从-1开始，转换为Sense索引，要 偏移 （-1)
             x = m_nCurX + m_Block.X(i);
-            y = m_nCurY + m_Block.Y(i) + 1;
+            y = m_nCurY + m_Block.Y(i) + 2;
 
-            if ((&*m_pMap)[x*m_nMapWidth + y] == 1)
+            if ((&*m_pMap)[x*m_nMapWidth + y] == 1 ||
+                y >= m_nMapWidth - 1)
             {
                 return false;
             }
@@ -140,9 +169,9 @@ bool CSense::BlockTryMove(int nDiret)
         {
             //方块矩阵索引从-1开始，转换为Sense索引，要 - （-1)
             x = m_nCurX + m_Block.X(i);
-            y = m_nCurY + m_Block.Y(i);
+            y = m_nCurY + m_Block.Y(i) + 1;
 
-            if ((&*m_pMap)[x*m_nMapWidth + y] == 1)
+            if ((&*m_pMap)[x*m_nMapWidth + y] == 1 || y <= 1)
             {
                 return false;
             }

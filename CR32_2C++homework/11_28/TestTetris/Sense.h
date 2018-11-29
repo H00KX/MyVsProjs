@@ -17,8 +17,10 @@ public:
     CSense(int xSize, int ySize);
 
     void DrawBg();
+    void DrawBlock();
 
     void ShowBlock(int x, int y);
+    void ClearBlock();
     void ShowBg(int x, int y);
 
     void CreateBlock();

@@ -22,8 +22,9 @@ int main()
                   30  // 宽度 30 列 // 1 列 = 1 个汉字 或 2 个英文 
     );
 
-    CSense sense(10, 10);
+    CSense sense(30, 30);
 
+    sense.DrawBlock();
 
     while (true)
     {
@@ -33,55 +34,56 @@ int main()
             ch = _getch();
 
             //clearBg();
-            if (ch = 'a')
+            if (ch == 's')
             {
-                for (int i = 0; i < 4; i++)
-                {
-                    x = sense.m_nCurX + sense.m_Block.X(i);
-                    y = sense.m_nCurY + sense.m_Block.Y(i) + 1;
-                    sense.ShowBlock(x, y);
-                }
-                //能够旋转
-                if (sense.BlockTryRotate())
-                {
-                    system("cls");
-                    sense.DrawBg();
-                    for (int i = 0; i < 4; i++)
-                    {
-                        x = sense.m_nCurX + sense.m_Block.X(i);
-                        //y坐标0，是左边的墙，所以y打印坐标要加一
-                        y = sense.m_nCurY + sense.m_Block.Y(i) + 1;
-                        sense.ShowBlock(x, y);
-                    }
-                }
-
-
-                //能够向下移动
+                //先消除
+                sense.ClearBlock();
+                //能够向下移动，再重新画
                 if (sense.BlockTryMove(DOWN))
                 {
-                    system("cls");
-                    sense.DrawBg();
-                    for (int i = 0; i < 4; i++)
-                    {
-                        x = sense.m_nCurX + sense.m_Block.X(i);
-                        //y坐标0，是左边的墙，所以y打印坐标要加一
-                        y = sense.m_nCurY + sense.m_Block.Y(i) + 1;
-                        sense.ShowBlock(x, y);
-                    }
-
-                    cout << "LEFT Move" << endl;
+                    sense.DrawBlock();
                 }
                 else    //不能向下移动
                 {
+                    //再重新画
+                    sense.DrawBlock();
+
                     //固定，并转化为墙
                     sense.FixBlock();
                     sense.CreateBlock();
                 }
 
+
+            }
+            else if (ch == 'w')
+            {
+                //先消除
+                sense.ClearBlock();
+                //能够旋转
+                sense.BlockTryRotate();
+
+                sense.DrawBlock();
+
+            }
+            else if (ch == 'a')
+            {
+                //先消除
+                sense.ClearBlock();
+                //能够向左移动
+                sense.BlockTryMove(LEFT);
+
+                sense.DrawBlock();
+
             }
             else if (ch == 'd')
             {
-                //block.RightRotate();
+                //先消除
+                sense.ClearBlock();
+                //能够向右移动
+                sense.BlockTryMove(RIGHT);
+
+                sense.DrawBlock();
+
             }
         }
 
