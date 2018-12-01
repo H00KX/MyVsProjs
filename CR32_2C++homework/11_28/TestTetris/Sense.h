@@ -21,6 +21,8 @@ public:
 
     void ShowBlock(int x, int y);
     void ClearBlock();
+    bool CheckRow(int nRow);
+    void ClearRow();
     void ShowBg(int x, int y);
 
     void CreateBlock();

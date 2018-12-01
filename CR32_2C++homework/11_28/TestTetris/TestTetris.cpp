@@ -22,7 +22,7 @@ int main()
                   30  // 宽度 30 列 // 1 列 = 1 个汉字 或 2 个英文 
     );
 
-    CSense sense(30, 30);
+    CSense sense(10, 10);
 
     sense.DrawBlock();
 
@@ -50,6 +50,14 @@ int main()
 
                     //固定，并转化为墙
                     sense.FixBlock();
+                    int x = 0;
+                    int y = 0;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        x = m_nCurX + m_Block.X(i);
+                        CheckRow(x);
+                    }
+                    int a = sense.CheckRow(8);
                     sense.CreateBlock();
                 }
 

@@ -86,7 +86,7 @@ void CSense::ShowBlock(int x, int y)
     );
 }
 
-//抹除整个方块
+//抹掉整个方块
 void CSense::ClearBlock()
 {
     int x = 0;
@@ -100,6 +100,27 @@ void CSense::ClearBlock()
     }
 }
 
+//检查指定行是否全满，行满则返回1
+bool CSense::CheckRow(int nRow)
+{
+    for (int i = 1; i < m_nMapWidth - 1; i++)
+    {
+        if ((&*m_pMap)[nRow*m_nMapWidth + i] == 0)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+//消行  然后将上面的行下移
+void CSense::ClearRow()
+{
+
+}
+
 //绘制背景色
 void CSense::ShowBg(int x, int y)
 {
@@ -111,6 +132,7 @@ void CSense::ShowBg(int x, int y)
     );
 }
 
+//创建一个新方块
 void CSense::CreateBlock()
 {
     m_nCurX = 3;
@@ -118,6 +140,7 @@ void CSense::CreateBlock()
     m_Block = CBlock();
 }
 
+//尝试移动
 bool CSense::BlockTryMove(int nDiret)
 {
     //要移动的方向的下一个块坐标
@@ -169,9 +192,9 @@ bool CSense::BlockTryMove(int nDiret)
         {
             //方块矩阵索引从-1开始，转换为Sense索引，要 - （-1)
             x = m_nCurX + m_Block.X(i);
-            y = m_nCurY + m_Block.Y(i) + 1;
+            y = m_nCurY + m_Block.Y(i);
 
-            if ((&*m_pMap)[x*m_nMapWidth + y] == 1 || y <= 1)
+            if ((&*m_pMap)[x*m_nMapWidth + y] == 1 || y <= 0)
             {
                 return false;
             }
@@ -182,6 +205,7 @@ bool CSense::BlockTryMove(int nDiret)
     }
 }
 
+//尝试旋转
 bool CSense::BlockTryRotate()
 {
     int x = 0;
@@ -204,6 +228,7 @@ bool CSense::BlockTryRotate()
     return true;
 }
 
+//固定，转化为墙
 void CSense::FixBlock()
 {
     int x = 0;
