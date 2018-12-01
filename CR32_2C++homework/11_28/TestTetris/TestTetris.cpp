@@ -18,13 +18,16 @@ int main()
     srand(time(NULL));
     // 1. 设置控制台标题和窗口大小
     SetWindowSize("控制台颜色测试用例", // 标题
-                  30, // 高度 30 行 // 在1920*1080的显示器中最大值为60
-                  30  // 宽度 30 列 // 1 列 = 1 个汉字 或 2 个英文 
+                  29, // 高度 30 行 // 在1920*1080的显示器中最大值为60
+                  60  // 宽度 30 列 // 1 列 = 1 个汉字 或 2 个英文 
     );
 
-    CSense sense(10, 10);
+    CSense sense(30, 30);
 
+    sense.DrawBg();
     sense.DrawBlock();
+
+    
 
     while (true)
     {
@@ -34,7 +37,7 @@ int main()
             ch = _getch();
 
             //clearBg();
-            if (ch == 's')
+            if (ch == 'S')
             {
                 //先消除
                 sense.ClearBlock();
@@ -50,44 +53,43 @@ int main()
 
                     //固定，并转化为墙
                     sense.FixBlock();
-                    int x = 0;
-                    int y = 0;
-                    for (int i = 0; i < 4; i++)
-                    {
-                        x = m_nCurX + m_Block.X(i);
-                        CheckRow(x);
-                    }
-                    int a = sense.CheckRow(8);
+
+                    sense.ResetBlockRowForE();
+                    sense.CSenseTryScroll();
                     sense.CreateBlock();
+
+                    system("cls");
+                    sense.DrawBg();
+                    sense.DrawBlock();
                 }
 
 
             }
-            else if (ch == 'w')
+            else if (ch == 'W')
             {
                 //先消除
                 sense.ClearBlock();
-                //能够旋转
+                //尝试旋转
                 sense.BlockTryRotate();
 
                 sense.DrawBlock();
 
             }
-            else if (ch == 'a')
+            else if (ch == 'A')
             {
                 //先消除
                 sense.ClearBlock();
-                //能够向左移动
+                //尝试向左移动
                 sense.BlockTryMove(LEFT);
 
                 sense.DrawBlock();
 
             }
-            else if (ch == 'd')
+            else if (ch == 'D')
             {
                 //先消除
                 sense.ClearBlock();
-                //能够向右移动
+                //尝试向右移动
                 sense.BlockTryMove(RIGHT);
 
                 sense.DrawBlock();
