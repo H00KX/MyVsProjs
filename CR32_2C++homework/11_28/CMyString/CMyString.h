@@ -2,6 +2,15 @@
 class CMystring
 {
 public:
+    CMystring();
+    CMystring(const char *pStr);
+    CMystring(CMystring &obj);
+    ~CMystring();
+
+    //CMystring &operator=(const char *pStr);   //直接隐式转换 CMystring(const char *pStr);
+    CMystring &operator=(CMystring &obj);
+    CMystring &operator+(const char *pStr);
+    CMystring &operator+=(const char *pStr);
     /* 返回当前缓冲区大小*/
     inline int GetBufferSize() const;
 
@@ -47,8 +56,6 @@ public:
     void ToLower();
 
 private:
-    int m_nBuffLen;
-    int m_nStrLen;
-    char *m_pStr;
 
+    CRefCount *m_Ref;
 };
