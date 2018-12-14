@@ -3,7 +3,8 @@
 class Bullet :public TankWarObj
 {
 public:
-    Bullet(int nType, int nCurX, int nCurY, int nRotate,int nID);
+
+    Bullet(int x, int y, int nRotate, int nID = 2, int nType = 0, int nWillFire = 0);
     ~Bullet() = default;
 
     void AutoRun();
@@ -16,11 +17,16 @@ public:
 
     void OnRight();
 
-public:
-    int m_nID;
-    int m_nType;
-    int m_nCurX;
-    int m_nCurY;
-    int m_nRotate;
+    virtual int CheckWall(unsigned char mapData[][26], int x, int y);
+
+    virtual int CheckObj(TankWarObj *obj, TankWarObj *another);
+
+    virtual void SetRotate(int nR)
+    {
+    };
+    virtual void SetFire(int)
+    {
+
+    };
 };
 

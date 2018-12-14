@@ -1,8 +1,10 @@
 #pragma once
 #include "Imagebuf.h"
+#include <iostream>
+#include "TankWarObj.h"
 #include "Tank.h"
 #include "RobotTank.h"
-
+#include "Bullet.h"
 
 //用于显示
 class CMyView
@@ -38,11 +40,23 @@ public:
     void OnLeft();
     void OnRight();
 
-    //检查碰撞
-    int CheckImpact(int x, int y);
+    void OnFire();
+
 
     //所有对象自动行动
-    void AutoRun();
+    int AllRun();
+    //检查碰墙
+    int CheckWall(TankWarObj *obj);
+    //检查互撞
+    int CheckObj(TankWarObj *obj, TankWarObj *another);
+    //干掉墙
+    void DestroyWallForObj(TankWarObj *obj);
+    //单个对象运动
+    void RunEach(TONode * p);
+    void ObjFire(TankWarObj *obj);
+public:
+    TONode tList;
+
 
 private:
     unsigned  char *MapPic[6];                //指向像素数据的指针  用以记录砖、铁……
@@ -52,10 +66,7 @@ private:
     unsigned char * BulletPic[2];             //两种子弹
 
 
-    TONode tList;
-
     CTank m_MyTank;//表示自己
-    RobotTank RTs[4];//四个机器人
 
     unsigned char m_mapData[26][26];
 };

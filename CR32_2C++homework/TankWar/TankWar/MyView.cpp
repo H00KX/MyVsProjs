@@ -1,9 +1,11 @@
 #include "stdafx.h"
+#include <malloc.h>
 #include "MyView.h"
 
 #include "glut\glut.h"
 
-int CTank::m_nMovStep = 25;
+
+int TankWarObj::m_nMovStep = 25;
 
 unsigned char g_mapData[26][26] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00,
@@ -34,8 +36,6 @@ unsigned char g_mapData[26][26] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00,	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x06, 0x00, 0x01, 0x00,	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  0x00,
 };
-
-
 
 CMyView::CMyView()
 {
@@ -95,9 +95,26 @@ CMyView::CMyView()
     m_MyTank.SetCurX(9 * 25);
     m_MyTank.SetCurY(25 * 25);
 
-    RTs[0] = RobotTank(0, 625 - 25, 1);
-}
+    TONode *p = nullptr;
+    tList.Obj = &m_MyTank;
 
+    p = (TONode*)malloc(sizeof(TONode));
+    p->Obj = new RobotTank(0, 25);
+    AddObj(&tList, p);
+
+    p = (TONode*)malloc(sizeof(TONode));
+    p->Obj = new RobotTank(8 * 25, 25);
+    AddObj(&tList, p);
+
+    p = (TONode*)malloc(sizeof(TONode));
+    p->Obj = new RobotTank(16 * 25, 25);
+    AddObj(&tList, p);
+
+    p = (TONode*)malloc(sizeof(TONode));
+    p->Obj = new RobotTank(24 * 25, 25);
+    AddObj(&tList, p);
+
+}
 
 CMyView::~CMyView()
 {
@@ -129,16 +146,22 @@ void CMyView::drawMap()
         }
     }
 
-    //绘图坐标系原点(0,0) 为左下角，x竖直向上，y水平向右
+    //坐标系原点(0,0) 为左下角，x竖直向上，y水平向右
     //开始绘制坦克
-    DrawTank(m_MyTank.CurX(),
-        (650 - m_MyTank.CurY() - 25),
-             m_MyTank.m_nType,
-             m_MyTank.m_nRotate);
-    DrawTank(RTs[0].CurX(),
-        (650 - RTs[0].CurY() - 25),
-             RTs[0].m_nType,
-             RTs[0].m_nRotate);
+
+    TONode *p = &tList;
+    while (p != nullptr)
+    {
+        if (p->Obj->m_nID == 0 || p->Obj->m_nID == 1)
+        {
+            DrawTank(p->Obj->CurX(), 650 - p->Obj->CurY() - 25, p->Obj->m_nType, p->Obj->m_nRotate);
+        }
+        if (p->Obj->m_nID == 2 || p->Obj->m_nID == 3)
+        {
+            DrawBullet(p->Obj->CurX(), 650 - p->Obj->CurY(), p->Obj->m_nType);
+        }
+        p = p->Next;
+    }
 }
 
 //CurX,CurY 坦克的左下角 在地图坐标系（原点(0,0)）中的位置
@@ -146,84 +169,326 @@ void CMyView::drawMap()
 //绘图坐标系原点(0,0) 为左下角，x竖直向上，y水平向右
 void CMyView::OnUp()
 {
-    //上移，Y减小一个步长    nx,ny即为 移动后的预期位置
-    int nX = m_MyTank.CurX() / 25;
-    int nY = (m_MyTank.CurY() - CTank::m_nMovStep) / 25;
 
-    if (!CheckImpact(nX, nY))
+    TONode *p = &tList;
+
+    while (p->Obj != nullptr&&p->Obj->m_nID != 0)
     {
-        m_MyTank.OnUp();
+        p = p->Next;
     }
+
+    p->Obj->SetRotate(0);
+    RunEach(p);
+
+    return;
 }
 
 void CMyView::OnDown()
 {
-    int nMore = 0;
-    int nX = m_MyTank.CurX() / 25;
-    int nY = (m_MyTank.CurY() + CTank::m_nMovStep) / 25;
 
-    if (!CheckImpact(nX, nY))
+    TONode *p = &tList;
+
+    while (p->Obj != nullptr&&p->Obj->m_nID != 0)
     {
-        m_MyTank.OnDown();
+        p = p->Next;
     }
+
+    p->Obj->SetRotate(2);
+    RunEach(p);
+
+    return;
 
 }
 
 void CMyView::OnLeft()
 {
-    int nX = (m_MyTank.CurX() - CTank::m_nMovStep) / 25;
-    int nY = m_MyTank.CurY() / 25;
+    TONode *p = &tList;
 
-    if (!CheckImpact(nX, nY))
+    while (p->Obj != nullptr&&p->Obj->m_nID != 0)
     {
-        m_MyTank.OnLeft();
+        p = p->Next;
     }
+
+    p->Obj->SetRotate(3);
+    RunEach(p);
+
+    return;
 
 }
 
 void CMyView::OnRight()
 {
-    int nX = (m_MyTank.CurX() + CTank::m_nMovStep) / 25;
-    int nY = m_MyTank.CurY() / 25;
+    TONode *p = &tList;
 
-    if (!CheckImpact(nX, nY))
+    while (p->Obj != nullptr&&p->Obj->m_nID != 0)
     {
-        m_MyTank.OnRight();
+        p = p->Next;
     }
 
+    p->Obj->SetRotate(1);
+    RunEach(p);
+
+    return;
 }
 
-//返回1，不能走。返回0，击中。返回2，可以走
-int CMyView::CheckImpact(int x, int y)
+void CMyView::OnFire()
 {
+    TONode *p = &tList;
 
-    if (x < 0 || x + 1 > 25)
+    while (p->Obj != nullptr&&p->Obj->m_nID != 0)
     {
-        return 1;
+        p = p->Next;
     }
 
-    if (y - 1 < 0 || y > 25)
+    p->Obj->SetFire(1);
+    ObjFire(p->Obj);
+    p->Obj->SetFire(0);
+    //RunEach(p);
+    AllRun();
+    return;
+}
+
+//除了玩家，都自动运行
+int CMyView::AllRun()
+{
+    TONode *p = &tList;
+
+    while (p->Obj != nullptr)
     {
-        return 1;
+        if (p->Obj->m_nID != 0)
+        {
+            p->Obj->SetRotate(0);
+            //开枪
+            if (p->Obj->m_nID == 1)
+            {
+                p->Obj->SetFire(1);
+                ObjFire(p->Obj);
+                p->Obj->SetFire(0);
+            }
+        }
+        if (p->Next != NULL)
+        {
+            p = p->Next;
+        }
+        else
+        {
+            break;
+        }
+
     }
 
-    if (m_mapData[y][x] != 0x00 ||
-        m_mapData[y][x + 1] != 0x00 ||
-        m_mapData[y - 1][x] != 0x00 ||
-        m_mapData[y - 1][x + 1] != 0x00)
+    p = &tList;
+    while (p->Obj != nullptr)
     {
-        return 1;
+        if (p->Obj->m_nID != 0)
+        {
+            RunEach(p);
+        }
+        if (p->Next != NULL)
+        {
+            p = p->Next;
+        }
+        else
+        {
+            break;
+        }
+
     }
 
     return 0;
 }
 
-void CMyView::AutoRun()
+//检查对象碰撞
+int CMyView::CheckObj(TankWarObj *obj, TankWarObj *another)
 {
-    for (int i = 0; i < 4; i++)
+    return obj->CheckObj(obj, another);
+}
+
+//干掉土墙或老爷
+void CMyView::DestroyWallForObj(TankWarObj * obj)
+{
+    int x = 0;
+    int y = 0;
+
+    if (obj->m_nRotate == 0)
     {
-        RTs[i].AutoRun();
+        x = obj->CurX() / 25;
+        y = (obj->CurY() - 1 * obj->m_nMovStep) / 25;
+
     }
+    if (obj->m_nRotate == 1)
+    {
+        x = (obj->CurX() + 1 * obj->m_nMovStep) / 25;
+        y = obj->CurY() / 25;
+    }
+    if (obj->m_nRotate == 2)
+    {
+        x = obj->CurX() / 25;
+        y = (obj->CurY() + 1 * obj->m_nMovStep) / 25;
+    }
+    if (obj->m_nRotate == 3)
+    {
+        x = (obj->CurX() - 1 * obj->m_nMovStep) / 25;
+        y = obj->CurY() / 25;
+    }
+
+    if (m_mapData[y][x] == 0x1)
+    {
+        m_mapData[y][x] = 0;
+    }
+
+    if (m_mapData[y][x] == 0x6)
+    {
+        std::cout << "老爷死了，结束\r\n";
+        system("pause");
+        exit(EXIT_SUCCESS);
+    }
+}
+
+//单个对象自动运行
+void CMyView::RunEach(TONode * p)
+{
+    TONode *another = &tList;
+
+    //nFlag ==0 表示可以移动
+    //nFlag ==1 表示不可以移动
+    int nFlag = 0;
+    int nChkWall = 0;
+
+    //对象撞墙，死或不移动
+    nChkWall = CheckWall(p->Obj);
+    //返回1 表示坦克撞墙， 子弹撞土墙
+    if (nChkWall == 1)
+    {
+        //是子弹,毁掉墙
+        if (p->Obj->m_nID == 2 || p->Obj->m_nID == 3)
+        {
+            DestroyWallForObj(p->Obj);
+            p = DelObj(&tList, p);
+            return;
+        }
+    }
+    //返回2 表示子弹出界， 撞铁
+    else if (nChkWall == 2)
+    {
+        p = DelObj(&tList, p);
+        return;
+    }
+    //没有撞墙
+    else
+    {
+        another = &tList;
+        while (another->Obj != nullptr)
+        {
+
+            if (p != another)
+            {   //返回0，碰撞,死或不移动
+                if (CheckObj(p->Obj, another->Obj) == 0)
+                {
+                    nFlag = 1;
+                    //碰撞者中，有子弹，两个对象都死亡
+                    //我坦0，敌坦1，我子弹2，敌子弹3
+                    if ((p->Obj->m_nID | another->Obj->m_nID) != 1)
+                    {
+                        if (p->Obj->m_nID == 0 || another->Obj->m_nID == 0)
+                        {
+                            //玩家被打中。退出
+                            std::cout << "玩家死了，结束\r\n";
+                            system("pause");
+                            exit(EXIT_SUCCESS);
+                        }
+                        p = DelObj(&tList, p);
+                        another = DelObj(&tList, another);
+                    }
+                    break;
+                }
+
+            }
+            if (another->Next != NULL)
+            {
+                another = another->Next;
+            }
+            else
+            {
+                break;
+            }
+
+
+        }
+        //标记为可移动
+        if (nFlag == 0)
+        {
+            //没撞墙，没互撞
+            //则移动
+            p->Obj->Move();
+        }
+
+    }
+}
+
+void CMyView::ObjFire(TankWarObj * obj)
+{
+    int x = 0;
+    int y = 0;
+
+    if (obj->m_nRotate == 0)
+    {
+        x = obj->CurX() / 25;
+        y = (obj->CurY() - 1 * obj->m_nMovStep) / 25;
+
+    }
+    if (obj->m_nRotate == 1)
+    {
+        x = (obj->CurX() + 1 * obj->m_nMovStep) / 25;
+        y = obj->CurY() / 25;
+    }
+    if (obj->m_nRotate == 2)
+    {
+        x = obj->CurX() / 25;
+        y = (obj->CurY() + 1 * obj->m_nMovStep) / 25;
+    }
+    if (obj->m_nRotate == 3)
+    {
+        x = (obj->CurX() - 1 * obj->m_nMovStep) / 25;
+        y = obj->CurY() / 25;
+    }
+
+    //开火
+    TONode *pB = (TONode*)malloc(sizeof(TONode));
+    pB->Obj = new Bullet(x * 25, y * 25, obj->m_nRotate, obj->m_nID + 2);
+    AddObj(&tList, pB);
+
+}
+
+//检查撞墙
+int CMyView::CheckWall(TankWarObj * obj)
+{
+    int x = 0;
+    int y = 0;
+
+    if (obj->m_nRotate == 0)
+    {
+        x = obj->CurX() / 25;
+        y = (obj->CurY() - obj->m_nMovStep) / 25;
+
+    }
+    if (obj->m_nRotate == 1)
+    {
+        x = (obj->CurX() + obj->m_nMovStep) / 25;
+        y = obj->CurY() / 25;
+    }
+    if (obj->m_nRotate == 2)
+    {
+        x = obj->CurX() / 25;
+        y = (obj->CurY() + obj->m_nMovStep) / 25;
+    }
+    if (obj->m_nRotate == 3)
+    {
+        x = (obj->CurX() - obj->m_nMovStep) / 25;
+        y = obj->CurY() / 25;
+    }
+
+    return obj->CheckWall(m_mapData, x, y);
 }
 
 void MixPic(int x, int y, int w, int h, unsigned char *buf)             //glReadPixels 

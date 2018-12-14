@@ -17,7 +17,8 @@ CMyView g_View;
 
 
 //绘制一个矩形
-void testDrawRect() {
+void testDrawRect()
+{
     //绘制矩形
     glColor3f(0.0f, 0.0f, 0.0f);
     glRectf(0.0f, 620.0f, 30.0f, 650.0f);
@@ -25,7 +26,8 @@ void testDrawRect() {
 }
 
 //通知重绘
-void update() {
+void update()
+{
     glutPostRedisplay(); //调用这个函数可以重新绘图,每次相应消息之后，所有全部重绘
 }
 
@@ -35,7 +37,7 @@ void display(void)
     glClear(GL_COLOR_BUFFER_BIT);/* clear all pixels   */
 
     g_View.drawMap();
- 
+
     //testDrawRect();
     glFlush();
 }
@@ -51,26 +53,36 @@ void keyboard(unsigned char key, int x, int y)
         case 'q':
             exit(EXIT_SUCCESS);
             break;
-        case 'w': {
-            std::cout << "w" << std::endl;
-            g_View.OnUp();
-        }
-             break;
-        case 's': {
-            std::cout << "s" << std::endl;
-            g_View.OnDown();
-        }
+        case 'w':
+            {
+                std::cout << "w" << std::endl;
+                g_View.OnUp();
+            }
             break;
-        case 'a': {
-            std::cout << "a" << std::endl;
-            g_View.OnLeft();
-        }
-        break;
-        case 'd': {
-            std::cout << "d" << std::endl;
-            g_View.OnRight();
-        }
-        break;
+        case 's':
+            {
+                std::cout << "s" << std::endl;
+                g_View.OnDown();
+            }
+            break;
+        case 'a':
+            {
+                std::cout << "a" << std::endl;
+                g_View.OnLeft();
+            }
+            break;
+        case 'd':
+            {
+                std::cout << "d" << std::endl;
+                g_View.OnRight();
+            }
+            break;
+        case 'j':
+            {
+                std::cout << "j" << std::endl;
+                g_View.OnFire();
+            }
+            break;
     }
     update();
 }
@@ -79,7 +91,7 @@ void keyboard(unsigned char key, int x, int y)
 void idle(int value)
 {
     std::cout << "123" << std::endl;
-    g_View.AutoRun();
+    g_View.AllRun();
     update();
     glutTimerFunc(1000, idle, 1);
 }
@@ -90,21 +102,21 @@ int main()
 
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); //设置显示模式
     glutInitWindowSize(SCR_WIDTH, SCR_HEIGHT); //设置窗口大小 
-    glutInitWindowPosition(200, 200); //设置窗口在屏幕上的位置 
+    glutInitWindowPosition(0, 0); //设置窗口在屏幕上的位置 
     glutCreateWindow("坦克大战"); //创建窗口并给出标题 
-   
+
     //键盘回调函数
     glutKeyboardFunc(keyboard);
 
     //定时器
-    glutTimerFunc(1000, idle, 1); 
+    glutTimerFunc(1000, idle, 1);
 
     //添加显示的回调函数
     glutDisplayFunc(display); //注册显示窗口时回调函数
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);//清屏
     glOrtho(0.0f, SCR_WIDTH, 0.0f, SCR_HEIGHT, 1.0, -1.0);
     //消息循环（处理操作系统等的消息，例如键盘、鼠标事件等）
-    glutMainLoop(); 
+    glutMainLoop();
 
     return 0;
 }

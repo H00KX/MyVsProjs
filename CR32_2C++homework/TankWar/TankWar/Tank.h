@@ -2,8 +2,10 @@
 #include "TankWarObj.h"
 class CTank :public TankWarObj
 {
+    //(int nCurX, int nCurY, int nRotate, int nID, int nType)
 public:
-    CTank(int nType = 0, int nRotate = 0, int nCurX = 0, int nCurY = 0, int nID = 0);
+    CTank() = default;
+    CTank(int x, int y, int nRotate = 0, int nID = 1, int nType = 0, int nWillFire = 0);
 
     virtual ~CTank();
 
@@ -11,37 +13,13 @@ public:
     void OnDown();
     void OnLeft();
     void OnRight();
+    virtual void SetRotate(int nR);
     virtual void Fire();
+    virtual void SetFire(int nF);
+    virtual int  WillFire();
     //自动运行
     virtual void AutoRun();
+    //virtual int CheckWall(unsigned mapData[][26],int x, int y);
 
-    int CurX()
-    {
-        return m_nCurX;
-    }
-    int CurY()
-    {
-        return m_nCurY;
-    }
-
-    void SetCurX(int X)
-    {
-        m_nCurX = X;
-    }
-
-    void SetCurY(int Y)
-    {
-        m_nCurY = Y;
-    }
-
-public:
-    int m_nRotate;
-    int m_nType;
-    static int m_nMovStep;
-
-protected:
-
-    int m_nCurX;
-    int m_nCurY;
 };
 
