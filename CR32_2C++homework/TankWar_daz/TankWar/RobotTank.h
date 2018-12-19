@@ -9,9 +9,6 @@ public:
     virtual ~RobotTank() = default;
     virtual void SetFire(int nF);
 
-    virtual int WillFire();
-    virtual void Fire();
-    virtual void AutoRun();
     virtual void SetRotate(int nR);
 
 };

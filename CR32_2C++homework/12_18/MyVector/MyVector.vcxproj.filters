@@ -24,22 +24,7 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyView.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Imagebuf.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Tank.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="RobotTank.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="TankWarObj.h">
+    <ClInclude Include="MVector.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,25 +32,10 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TankWar.cpp">
+    <ClCompile Include="MyVector.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MyView.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageBuf.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Tank.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="RobotTank.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TankWarObj.cpp">
+    <ClCompile Include="MVector.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

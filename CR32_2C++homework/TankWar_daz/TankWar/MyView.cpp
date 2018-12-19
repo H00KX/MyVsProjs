@@ -243,7 +243,7 @@ void CMyView::OnFire()
     p->Obj->SetFire(1);
     ObjFire(p->Obj);
     p->Obj->SetFire(0);
-    //RunEach(p);
+    
     AllRun();
     return;
 }
@@ -380,7 +380,6 @@ void CMyView::RunEach(TONode * p)
         another = &tList;
         while (another->Obj != nullptr)
         {
-
             if (p != another)
             {   //返回0，碰撞,死或不移动
                 if (CheckObj(p->Obj, another->Obj) == 0)
@@ -402,7 +401,6 @@ void CMyView::RunEach(TONode * p)
                     }
                     break;
                 }
-
             }
             if (another->Next != NULL)
             {
@@ -412,8 +410,6 @@ void CMyView::RunEach(TONode * p)
             {
                 break;
             }
-
-
         }
         //标记为可移动
         if (nFlag == 0)
@@ -422,7 +418,6 @@ void CMyView::RunEach(TONode * p)
             //则移动
             p->Obj->Move();
         }
-
     }
 }
 

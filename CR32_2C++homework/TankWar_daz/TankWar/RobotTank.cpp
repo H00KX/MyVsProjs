@@ -21,9 +21,11 @@ void RobotTank::SetRotate(int nR)
 
 void RobotTank::SetFire(int nF)
 {
+    int n = 0;
     if (nF == 1)
     {
-        if (rand() % 10 == 1)
+        n = rand() % 10;
+        if (n == 1)
         {
             m_nWillFire = 1;
         }
@@ -32,24 +34,5 @@ void RobotTank::SetFire(int nF)
     {
         m_nWillFire = 0;
     }
-}
-
-int RobotTank::WillFire()
-{
-    return m_nWillFire;
-}
-
-void RobotTank::Fire()
-{
-    //4分之一的几率开枪
-
-}
-
-void RobotTank::AutoRun()
-{
-
-
-
-
 }
 

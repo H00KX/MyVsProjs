@@ -101,7 +101,7 @@ int TankWarObj::CheckObj(TankWarObj *obj,TankWarObj *another)
     int nX = another->CurX() / 25;
     int nY = another->CurY() / 25;
 
-    //我是坦克
+    //obj是坦克
     ObjPos curTank[4] = {
         { x, y - 1 },{ x + 1, y - 1 },
         { x, y },{ x + 1,   y }
@@ -152,6 +152,7 @@ int TankWarObj::CheckObj(TankWarObj *obj,TankWarObj *another)
     return 1;
 }
 
+//将对象向预测位置移动
 void TankWarObj::Move()
 {
     if (m_nRotate == 0)

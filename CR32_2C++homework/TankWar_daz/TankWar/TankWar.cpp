@@ -93,7 +93,7 @@ void idle(int value)
     std::cout << "123" << std::endl;
     g_View.AllRun();
     update();
-    glutTimerFunc(1000, idle, 1);
+    glutTimerFunc(300, idle, 1);
 }
 
 

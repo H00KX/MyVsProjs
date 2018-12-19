@@ -11,49 +11,6 @@ Bullet::Bullet(int x, int y, int nRotate, int nID, int nType, int nWillFire)
     m_nWillFire = nWillFire;
 }
 
-void Bullet::AutoRun()
-{
-    if (m_nRotate == 0)
-    {
-        Move();
-    }
-    if (m_nRotate == 1)
-    {
-        OnRight();
-    }
-    if (m_nRotate == 2)
-    {
-        OnDown();
-    }
-    if (m_nRotate == 3)
-    {
-        OnLeft();
-    }
-}
-
-void Bullet::OnUp()
-{
-    //m_nRotate = 0;
-    m_nCurY -= 25;
-}
-
-void Bullet::OnDown()
-{
-    //m_nRotate = 2;
-    m_nCurY += 25;
-}
-
-void Bullet::OnLeft()
-{
-    //m_nRotate = 3;
-    m_nCurX -= 25;
-}
-
-void Bullet::OnRight()
-{
-    //m_nRotate = 1;
-    m_nCurX += 25;
-}
 
 int Bullet::CheckWall(unsigned char mapData[][26], int x, int y)
 {

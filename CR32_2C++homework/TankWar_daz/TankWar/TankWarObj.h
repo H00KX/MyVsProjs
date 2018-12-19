@@ -30,23 +30,11 @@ public:
 
     }
 
-    virtual void AutoRun()
-    {
-
-    };
     virtual void SetFire(int nF)
     {
 
     };
 
-    virtual int  WillFire()
-    {
-        return 0;
-    };
-    virtual void Fire(int)
-    {
-
-    };
     virtual int CheckWall(unsigned char mapData[][26], int x, int y);
     virtual int CheckObj(TankWarObj *obj, TankWarObj *another);
     virtual void Move();
