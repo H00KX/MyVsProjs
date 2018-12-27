@@ -145,11 +145,17 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\CR32\c++\06TestTetris\TestTetris\setdisplay.h" />
+    <ClInclude Include="HungrySnake.h" />
+    <ClInclude Include="map.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\CR32\c++\06TestTetris\TestTetris\setdisplay.cpp" />
     <ClCompile Include="HungrySnake.cpp" />
+    <ClCompile Include="mainUi.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
